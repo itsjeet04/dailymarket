@@ -32,25 +32,28 @@ export default function StockPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const [infoRes, analysisRes] = await Promise.all([
+        fetch(`http://localhost:8000/stock/${ticker}`),
+        fetch(`http://localhost:8000/stock/${ticker}/analysis`),
+      ]);
+      const infoData = await infoRes.json();
+      const analysisData = await analysisRes.json();
+      setInfo(infoData);
+      setAnalysis(analysisData);
+    } catch {
+      setError("Failed to fetch stock data.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const [infoRes, analysisRes] = await Promise.all([
-          fetch(`http://localhost:8000/stock/${ticker}`),
-          fetch(`http://localhost:8000/stock/${ticker}/analysis`),
-        ]);
-        const infoData = await infoRes.json();
-        const analysisData = await analysisRes.json();
-        setInfo(infoData);
-        setAnalysis(analysisData);
-      } catch {
-        setError("Failed to fetch stock data.");
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchData();
+    const interval = setInterval(fetchData, 30000);
+    return () => clearInterval(interval);
   }, [ticker]);
 
   if (loading) return (
