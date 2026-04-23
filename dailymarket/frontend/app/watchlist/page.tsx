@@ -28,7 +28,7 @@ export default function WatchlistPage() {
   }, []);
 
   const fetchWatchlist = async () => {
-    const res = await fetch("http://localhost:8000/watchlist");
+    const res = await fetch("${process.env.NEXT_PUBLIC_API_URL}/watchlist");
     const data = await res.json();
     setWatchlist(data);
     fetchLivePrices(data);
@@ -40,7 +40,7 @@ export default function WatchlistPage() {
     await Promise.all(
       items.map(async (item) => {
         try {
-          const res = await fetch(`http://localhost:8000/stock/${item.ticker}`);
+          const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/stock/${item.ticker}`);
           const data = await res.json();
           priceMap[item.ticker] = {
             current_price: data.current_price,
@@ -61,7 +61,7 @@ export default function WatchlistPage() {
 
     try {
       // first verify stock exists
-      const infoRes = await fetch(`http://localhost:8000/stock/${ticker.toUpperCase()}`);
+      const infoRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/stock/${ticker.toUpperCase()}`);
       if (!infoRes.ok) {
         setError("Stock not found! Try AAPL, TSLA, MSFT");
         setLoading(false);
@@ -70,7 +70,7 @@ export default function WatchlistPage() {
       const info = await infoRes.json();
 
       // add to watchlist
-      const res = await fetch("http://localhost:8000/watchlist", {
+      const res = await fetch("${process.env.NEXT_PUBLIC_API_URL}/watchlist", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -95,7 +95,7 @@ export default function WatchlistPage() {
   };
 
   const handleDelete = async (ticker: string) => {
-    await fetch(`http://localhost:8000/watchlist/${ticker}`, {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/watchlist/${ticker}`, {
       method: "DELETE",
     });
     fetchWatchlist();

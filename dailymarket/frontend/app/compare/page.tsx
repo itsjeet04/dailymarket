@@ -33,7 +33,7 @@ export default function ComparePage() {
 
     try {
       const res = await fetch(
-        `http://localhost:8000/compare?a=${tickerA.toUpperCase()}&b=${tickerB.toUpperCase()}`
+        `${process.env.NEXT_PUBLIC_API_URL}/compare?a=${tickerA.toUpperCase()}&b=${tickerB.toUpperCase()}`
       );
       const data: CompareData = await res.json();
 

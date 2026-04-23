@@ -36,8 +36,8 @@ export default function StockPage() {
     try {
       setLoading(true);
       const [infoRes, analysisRes] = await Promise.all([
-        fetch(`http://localhost:8000/stock/${ticker}`),
-        fetch(`http://localhost:8000/stock/${ticker}/analysis`),
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/stock/${ticker}`),
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/stock/${ticker}/analysis`),
       ]);
       const infoData = await infoRes.json();
       const analysisData = await analysisRes.json();

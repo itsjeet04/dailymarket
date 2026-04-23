@@ -12,7 +12,7 @@ export default function Home() {
     setError("");
 
     try {
-      const res = await fetch(`http://localhost:8000/stock/${ticker.toUpperCase()}`);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/stock/${ticker.toUpperCase()}`);
       if (!res.ok) {
         setError("Stock not found! Try AAPL, TSLA, MSFT");
         return;
